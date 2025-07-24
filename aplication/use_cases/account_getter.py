@@ -4,7 +4,7 @@ import requests
 from domain.constants import BASE_URL, ACCOUNT_HEADERS
 
 
-class AccountBuilder(UseCase):
+class AccountGetter(UseCase):
 
     def execute(self, *args, **kwargs) -> Account:
         response = requests.get(f"{BASE_URL}/my/agent", headers=ACCOUNT_HEADERS)
@@ -26,9 +26,7 @@ class AccountBuilder(UseCase):
             id=data["accountId"]
         )
 
-
 if __name__ == "__main__":
     from pprint import pprint
-
-    account = AccountBuilder().execute()
+    account = AccountGetter().execute()
     pprint(account)
