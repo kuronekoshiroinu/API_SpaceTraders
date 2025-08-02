@@ -19,7 +19,6 @@ class ContractGetter(UseCase):
     def _parse_contracts_data(self, api_response: dict) -> list[Contract]:
         """Convierte la respuesta de la API en una lista de objetos Contract"""
         contracts = []
-        pprint(api_response)
         for contract_data in api_response["data"]:
             contracts.append(
                 Contract(
@@ -73,6 +72,6 @@ class ContractGetter(UseCase):
 
 if __name__ == "__main__":
     from pprint import pprint
-
-    contrac = ContractGetter().execute()
-    pprint(contrac)
+    contracts = ContractGetter().execute()
+    pprint(contracts)
+    print(contracts[0].terms.deliver[0].system_symbol)

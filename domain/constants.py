@@ -9,3 +9,6 @@ ACCOUNT_HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
     "Content-Type": "application/json"
 }
+AUTHORIZATION_HEADERS = {
+    "Authorization": f"Bearer {TOKEN}",
+}
