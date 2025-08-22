@@ -1,3 +1,4 @@
+from domain.entities.ship_purchase import ShipPurchase
 from domain.interfaces import UseCase
 from domain.constants import BASE_URL, ACCOUNT_HEADERS
 from dataclasses import dataclass
@@ -16,6 +17,31 @@ class ShipPurchaser(UseCase):
 
         response = requests.post(
             url,
-            headers={ACCOUNT_HEADERS},
+            headers=ACCOUNT_HEADERS,
             json=payload
         )
+        print(response.status_code)
+        #return response.json()
+        if response.status_code in (200, 201):
+            return self._parse_ship_purchase_data(response.json())
+        else:
+            error_msg = response.json().get('error', {}).get('message', 'Error desconocido')
+            raise ValueError(f"Error al obtener ship purchase: {error_msg} statusCode: {response.status_code}")
+
+    def _parse_ship_purchase_data(self, shipp_data: dict) -> ShipPurchase:
+        data=shipp_data["data"]
+        return ShipPurchase(
+            agent=data["agent"],
+            ship=data["ship"],
+            transaction=data["transaction"]
+        )
+
+if __name__ == '__main__':
+    from pprint import pprint
+    ship_purch=ShipPurchaser(
+        ship_type="SHIP_SURVEYOR",
+        waypoint_symbol="X1-QB16-H54"
+    )
+    ship_data=ship_purch.execute()
+    pprint(ship_data)
+
