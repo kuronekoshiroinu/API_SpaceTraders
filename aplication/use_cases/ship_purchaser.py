@@ -39,8 +39,8 @@ class ShipPurchaser(UseCase):
 if __name__ == '__main__':
     from pprint import pprint
     ship_purch=ShipPurchaser(
-        ship_type="SHIP_SURVEYOR",
-        waypoint_symbol="X1-QB16-H54"
+        ship_type="SHIP_MINING_DRONE",
+        waypoint_symbol="X1-MD96-H51"
     )
     ship_data=ship_purch.execute()
     pprint(ship_data)
