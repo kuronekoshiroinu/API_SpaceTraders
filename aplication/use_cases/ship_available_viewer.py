@@ -24,7 +24,6 @@ class ShipAvailableViewer(UseCase):
     def execute(self, *args, **kwargs):
         url = f"{BASE_URL}/systems/{self.system_symbol}/waypoints/{self.waypoint_symbol}/shipyard"
         response = requests.get(url, headers=ACCOUNT_HEADERS)
-        #return response.json()
         if response.status_code == 200:
             return self._parse_ships_availables_data(response.json())
         else:

@@ -12,8 +12,7 @@ class EngineeredAsteroidFinder(UseCase):
     system_symbol: str
 
     def execute(self, *args, **kwargs):
-        response = requests.get(f"{BASE_URL}/systems/{self.system_symbol}/waypoints?type=ENGINEERED_ASTEROID")                                #headers=AUTHORIZATION_HEADERS)
-        #return response.json()
+        response = requests.get(f"{BASE_URL}/systems/{self.system_symbol}/waypoints?type=ENGINEERED_ASTEROID")
         if response.status_code == 200:
             return self._parse_engineered_asteroid_data(response.json()["data"])
         else:
