@@ -33,20 +33,9 @@ class ToAsteroidFlyer:
         return ShipPurchaseShipNavRoute(
             arrival=data["arrival"],
             departure_time=data["departureTime"],
-            destination=cls._get_ship_flyer_ubication(data["destination"]),
-            origin=cls._get_ship_flyer_ubication(data["origin"])
+            destination=ShipPurchaseShipUbication.from_dict(data["destination"]),
+            origin=ShipPurchaseShipUbication.from_dict(data["origin"])
         )
-
-    @classmethod
-    def _get_ship_flyer_ubication(cls, data:dict)->ShipPurchaseShipUbication:
-        return ShipPurchaseShipUbication(
-            symbol=data["symbol"],
-            system_symbol=data["systemSymbol"],
-            type=data["type"],
-            x=data["x"],
-            y=data["y"]
-        )
-
 
 if __name__=="__main__":
     from pprint import pprint
