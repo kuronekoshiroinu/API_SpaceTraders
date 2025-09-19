@@ -39,5 +39,5 @@ class ToAsteroidFlyer:
 
 if __name__=="__main__":
     from pprint import pprint
-    flyer=ToAsteroidFlyer("AGENT_ROUGE-3").execute()
+    flyer=ToAsteroidFlyer("AGENT_BLUE-3").execute()
     pprint(flyer)

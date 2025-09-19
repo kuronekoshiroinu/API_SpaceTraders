@@ -55,5 +55,5 @@ class EngineeredAsteroidFinder(UseCase):
 
 if __name__ == "__main__":
     from pprint import pprint
-    asteroide=EngineeredAsteroidFinder("X1-MD96").execute()
+    asteroide=EngineeredAsteroidFinder("X1-RH66").execute()
     pprint(asteroide)
