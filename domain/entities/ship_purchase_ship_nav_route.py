@@ -9,3 +9,12 @@ class ShipPurchaseShipNavRoute:
     departure_time: str
     destination: ShipPurchaseShipUbication
     origin: ShipPurchaseShipUbication
+
+    @classmethod
+    def from_dict(cls,data:dict):
+        return cls(
+            arrival=data["arrival"],
+            departure_time=data["departureTime"],
+            destination=ShipPurchaseShipUbication.from_dict(data["destination"]),
+            origin=ShipPurchaseShipUbication.from_dict(data["origin"])
+        )

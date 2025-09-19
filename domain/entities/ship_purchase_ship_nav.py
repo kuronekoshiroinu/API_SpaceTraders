@@ -10,3 +10,13 @@ class ShipPurchaseShipNav:
     status: str
     system_symbol: str
     waypoint_symbol: str
+
+    @classmethod
+    def from_dict(cls,data:dict):
+        return cls(
+            flight_mode=data["flightMode"],
+            route= ShipPurchaseShipNavRoute.from_dict(data["route"]),
+            status=data["status"],
+            system_symbol=data["systemSymbol"],
+            waypoint_symbol=data["waypointSymbol"]
+        )
