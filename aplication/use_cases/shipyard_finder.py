@@ -1,12 +1,13 @@
-from pprint import pprint
 from dataclasses import dataclass
+from pprint import pprint
+
+import requests
+
 from domain.constants import BASE_URL, AUTHORIZATION_HEADERS
 from domain.entities.shipyard import Shipyard
 from domain.entities.shipyard_chart import ShipyardChart
 from domain.entities.shipyard_faction import ShipyardFaction
 from domain.interfaces import UseCase
-import requests
-from aplication.use_cases.contract_getter import ContractGetter
 
 
 @dataclass
@@ -55,7 +56,10 @@ class ShipyardFinder(UseCase):
 
 
 if __name__ == "__main__":
-    contracts = ContractGetter().execute()
+    from infraestructure.services.space_traders_service import SpaceTradersService
+
+    contracts = SpaceTradersService().get_contract([])
+
     shipyard_info = ShipyardFinder(contracts[0].terms.deliver[0].system_symbol).execute()
     pprint(shipyard_info)
     # print(type(shipyard_info))

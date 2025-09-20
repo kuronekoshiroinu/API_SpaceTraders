@@ -24,3 +24,11 @@ class Contract:
             fulfilled=data["fulfilled"],
             terms=ContractTerms.from_dict(data["terms"]),
         )
+    @classmethod
+    def from_list(cls, contracts_list: list[dict]) -> list["Contract"]:
+        contracts = []
+        for contract_dict in contracts_list:
+            contracts.append(
+                cls.from_dict(contract_dict)
+            )
+        return contracts

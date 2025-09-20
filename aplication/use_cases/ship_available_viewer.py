@@ -2,7 +2,6 @@ from dataclasses import dataclass
 
 import requests
 
-from aplication.use_cases.contract_getter import ContractGetter
 from aplication.use_cases.shipyard_finder import ShipyardFinder
 from domain.constants import BASE_URL, ACCOUNT_HEADERS
 from domain.entities.ships_available import ShipsAvailable
@@ -29,8 +28,10 @@ class ShipAvailableViewer(UseCase):
 
 if __name__ == '__main__':
     from pprint import pprint
+    from infraestructure.services.space_traders_service import SpaceTradersService
 
-    contracts = ContractGetter().execute()
+    contracts = SpaceTradersService().get_contract([])
+
     shipyard_info = ShipyardFinder(contracts[0].terms.deliver[0].system_symbol).execute()
     pprint(shipyard_info)
     # print(shipyard_info[1].symbol)

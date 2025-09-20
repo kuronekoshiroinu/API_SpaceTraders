@@ -18,10 +18,12 @@ class ContractAccepter(UseCase):
             raise ValueError(f"Error al aceptar contrato {self.contract_id}: {error_msg}")
 
 if __name__ == "__main__":
-    from aplication.use_cases.contract_getter import ContractGetter
     from domain.entities.contract import Contract
     from pprint import pprint
-    contract:list[Contract] = ContractGetter().execute()
+    from infraestructure.services.space_traders_service import SpaceTradersService
+
+    contract:list[Contract] = SpaceTradersService().get_contract([])
+
     id_contract=contract[0].id
     pprint(contract)
     if contract[0].accepted == False:
