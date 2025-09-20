@@ -67,5 +67,5 @@ class ShipNavigater:
 
 if __name__=="__main__":
     from pprint import pprint
-    flyer=ShipNavigater("AGENT_BLUE-4", "X1-RH66-A2").execute()
+    flyer=ShipNavigater("AGENT_BLUE-6", "X1-RH66-EF5D").execute()
     pprint(flyer)

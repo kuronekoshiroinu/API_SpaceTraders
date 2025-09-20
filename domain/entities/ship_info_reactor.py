@@ -12,3 +12,16 @@ class ShipInfoReactor:
     quality: int
     requirements: ShipInfoRequirements
     symbol: str
+
+    @classmethod
+    def from_dict(cls, data: dict) :
+        return cls(
+            condition=data["condition"],
+            description=data["description"],
+            integrity=data["integrity"],
+            name=data["name"],
+            power_output=data["powerOutput"],
+            quality=data["quality"],
+            requirements=ShipInfoRequirements.from_dict(data["requirements"]),
+            symbol=data["symbol"],
+        )

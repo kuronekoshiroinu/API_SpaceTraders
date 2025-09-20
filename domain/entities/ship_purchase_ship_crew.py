@@ -7,3 +7,14 @@ class ShipPurchaseShipCrew(ShipInfoCrew):
     morale: int
     rotation: str
     wages: int
+
+    @classmethod
+    def from_dict(cls, data:dict):
+        return cls(
+            current=data["current"],
+            morale=data["morale"],
+            rotation=data["rotation"],
+            wages=data["wages"],
+            capacity=data["capacity"],
+            required=data["required"],
+        )

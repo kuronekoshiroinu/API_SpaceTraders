@@ -13,3 +13,16 @@ class ShipInfoEngine:
     requirements: ShipInfoRequirements
     speed: int
     symbol: str
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            condition=data["condition"],
+            description=data["description"],
+            integrity=data["integrity"],
+            name=data["name"],
+            quality=data["quality"],
+            requirements=ShipInfoRequirements.from_dict(data["requirements"]),
+            speed=data["speed"],
+            symbol=data["symbol"]
+        )

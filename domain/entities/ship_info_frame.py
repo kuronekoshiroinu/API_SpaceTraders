@@ -15,3 +15,18 @@ class ShipInfoFrame:
     quality: int
     requirements: ShipInfoRequirements
     symbol: str
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            condition=data["condition"],
+            description=data["description"],
+            fuel_capacity=data["fuelCapacity"],
+            integrity=data["integrity"],
+            module_slots=data["moduleSlots"],
+            mounting_points=data["mountingPoints"],
+            name=data["name"],
+            quality=data["quality"],
+            requirements=ShipInfoRequirements.from_dict(data["requirements"]),
+            symbol=data["symbol"]
+        )

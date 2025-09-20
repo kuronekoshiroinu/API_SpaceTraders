@@ -11,3 +11,14 @@ class ShipInfoMounts:
     strength: int
     symbol: str
     deposits: list = None
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            description=data["description"],
+            name=data["name"],
+            requirements=ShipInfoRequirements.from_dict(data["requirements"]),
+            strength=data["strength"],
+            symbol=data["symbol"],
+            deposits=list(data["deposits"]) if data.get("deposits", None) else None,
+        )
