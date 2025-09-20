@@ -13,13 +13,13 @@ class UseCase(ABC):
 
 class TradersService(ABC):
     @abstractmethod
-    def get_account(self, data: dict) -> Account:
+    def get_account(self) -> Account:
         raise NotImplementedError
 
     @abstractmethod
-    def get_contract(self, data: list[dict]) -> list[Contract]:
+    def get_contract(self) -> list[Contract]:
         raise NotImplementedError
 
     @abstractmethod
-    def get_ships(self, data:list[dict])->list[ShipPurchaseShip]:
+    def get_ships(self)->list[ShipPurchaseShip]:
         raise NotImplementedError
