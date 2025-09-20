@@ -22,3 +22,12 @@ class ShipInfoMounts:
             symbol=data["symbol"],
             deposits=list(data["deposits"]) if data.get("deposits", None) else None,
         )
+
+    @classmethod
+    def from_list(cls, mounts_data: list[dict]) -> list["ShipInfoMounts"]:
+        mounts = []
+        for mount in mounts_data:
+            mounts.append(
+                cls.from_dict(mount)
+            )
+        return mounts

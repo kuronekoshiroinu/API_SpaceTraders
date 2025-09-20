@@ -10,4 +10,14 @@ class ShipsAvailable:
     ships_types: list[ShipAvailableInfoTypes]
     ships: list[ShipInfo]
     symbol: str
-    transactions:list
+    transactions: list
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            modifications_fee=data["modificationsFee"],
+            ships_types=ShipAvailableInfoTypes.from_list(data["shipTypes"]),
+            ships=ShipInfo.from_list(data["ships"]),
+            symbol=data["symbol"],
+            transactions=data["transactions"],
+        )
