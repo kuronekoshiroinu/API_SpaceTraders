@@ -15,16 +15,8 @@ class AccountGetter(UseCase):
             raise ValueError(f"Error al obtener datos: {response.status_code}")
 
     def _parse_account_data(self, api_response: dict) -> Account:
-        """Convierte la respuesta de la API en un objeto Account"""
         data = api_response["data"]
-        return Account(
-            symbol=data["symbol"],
-            credits=data["credits"],
-            headquarters=data["headquarters"],
-            ship_count=data["shipCount"],
-            starting_faction=data["startingFaction"],
-            id=data["accountId"]
-        )
+        return Account.from_dict(data)
 
 if __name__ == "__main__":
     from pprint import pprint
