@@ -15,11 +15,9 @@ class ShipDocker(UseCase):
         response = requests.post(f"{BASE_URL}/my/ships/{self.mining_ship_symbol}/dock",
                                  headers=AUTHORIZATION_HEADERS)
         if response.status_code == 200:
-            return self._parse_ship_docker(response.json()["data"])
+            return ShipPurchaseShipNav.from_dict(response.json()["data"]["nav"])
         else:
             raise ValueError(f"Error al obtener datos: {response.status_code}")
-    def _parse_ship_docker(self, ship_data:dict)->ShipPurchaseShipNav:
-        return ShipPurchaseShipNav.from_dict(ship_data["nav"])
 
 if __name__=="__main__":
     from pprint import pprint

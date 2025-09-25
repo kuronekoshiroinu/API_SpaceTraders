@@ -32,3 +32,12 @@ class EngineeredAsteroid:
                     x=data["x"],
                     y=data["y"]
                 )
+
+    @classmethod
+    def from_list(cls, asteroids_data: list[dict]) -> list["EngineeredAsteroid"]:
+        asteroids = []
+        for asteroid_data in asteroids_data:
+            asteroids.append(
+                EngineeredAsteroid.from_dict(asteroid_data)
+            )
+        return asteroids

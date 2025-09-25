@@ -15,18 +15,9 @@ class ShipOrbiter:
         response = requests.post(f"{BASE_URL}/my/ships/{self.mining_ship_symbol}/orbit",
                               headers=AUTHORIZATION_HEADERS)
         if response.status_code == 200:
-            return self._parse_ship_flyer(response.json()["data"]["nav"])
+            return ShipPurchaseShipNav.from_dict(response.json()["data"]["nav"])
         else:
             raise ValueError(f"Error al obtener datos: {response.status_code}")
-
-    def _parse_ship_flyer(self, ship_data:dict) -> ShipPurchaseShipNav:
-        return ShipPurchaseShipNav(
-            flight_mode=ship_data["flightMode"],
-            route=ShipPurchaseShipNavRoute.from_dict(ship_data["route"]),
-            status=ship_data["status"],
-            system_symbol=ship_data["systemSymbol"],
-            waypoint_symbol=ship_data["waypointSymbol"]
-        )
 
 if __name__=="__main__":
     from pprint import pprint

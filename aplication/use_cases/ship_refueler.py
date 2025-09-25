@@ -13,14 +13,12 @@ class ShipRefueler(UseCase):
         response = requests.post(f"{BASE_URL}/my/ships/{self.mining_ship_symbol}/refuel",
                                  headers=AUTHORIZATION_HEADERS)
         if response.status_code == 200:
-            return self._parse_ship_refueler(response.json())
+            return ShipRefuel.from_dict(response.json()["data"])
             #return response.json()
         else:
             raise ValueError(f"Error al obtener datos: {response.status_code}")
 
-    def _parse_ship_refueler(self, data:dict)-> ShipRefuel:
-        return ShipRefuel.from_dict(data["data"])
 if __name__=="__main__":
     from pprint import pprint
-    flyer=ShipRefueler("AGENT_BLUE-4").execute()
+    flyer=ShipRefueler("AGENT_ROUGE-2").execute()
     pprint(flyer)

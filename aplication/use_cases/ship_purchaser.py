@@ -23,24 +23,17 @@ class ShipPurchaser(UseCase):
         print(response.status_code)
         #return response.json()
         if response.status_code in (200, 201):
-            return self._parse_ship_purchase_data(response.json())
+            return ShipPurchase.from_dict(response.json()["data"])
         else:
             error_msg = response.json().get('error', {}).get('message', 'Error desconocido')
             raise ValueError(f"Error al obtener ship purchase: {error_msg} statusCode: {response.status_code}")
 
-    def _parse_ship_purchase_data(self, shipp_data: dict) -> ShipPurchase:
-        data=shipp_data["data"]
-        return ShipPurchase(
-            agent=data["agent"],
-            ship=data["ship"],
-            transaction=data["transaction"]
-        )
 
 if __name__ == '__main__':
     from pprint import pprint
     ship_purch=ShipPurchaser(
         ship_type="SHIP_MINING_DRONE",
-        waypoint_symbol="X1-CY20-H53"
+        waypoint_symbol="X1-ZK44-H49"
     )
     ship_data=ship_purch.execute()
     pprint(ship_data)
