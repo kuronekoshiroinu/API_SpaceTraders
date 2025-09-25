@@ -40,7 +40,7 @@ if __name__ == '__main__':
     from pprint import pprint
     ship_purch=ShipPurchaser(
         ship_type="SHIP_MINING_DRONE",
-        waypoint_symbol="X1-RH66-H53"
+        waypoint_symbol="X1-CY20-H53"
     )
     ship_data=ship_purch.execute()
     pprint(ship_data)
