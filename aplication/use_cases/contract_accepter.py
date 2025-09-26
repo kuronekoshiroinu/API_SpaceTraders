@@ -22,7 +22,7 @@ if __name__ == "__main__":
     from pprint import pprint
     from infraestructure.services.space_traders_service import SpaceTradersService
 
-    contract:list[Contract] = SpaceTradersService().get_contract()
+    contract:list[Contract] = SpaceTradersService().get_contracts()
 
     id_contract=contract[0].id
     pprint(contract)

@@ -17,7 +17,7 @@ class TradersService(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_contract(self) -> list[Contract]:
+    def get_contracts(self) -> list[Contract]:
         raise NotImplementedError
 
     @abstractmethod

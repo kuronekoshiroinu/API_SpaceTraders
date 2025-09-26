@@ -24,7 +24,7 @@ class ShipyardFinder(UseCase):
 if __name__ == "__main__":
     from infraestructure.services.space_traders_service import SpaceTradersService
 
-    contracts = SpaceTradersService().get_contract()
+    contracts = SpaceTradersService().get_contracts()
 
     shipyard_info = ShipyardFinder(contracts[0].terms.deliver[0].system_symbol).execute()
     pprint(shipyard_info)
