@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from domain.entities.account import Account
 from domain.entities.contract import Contract
+from domain.entities.engineered_asteroid import EngineeredAsteroid
 from domain.entities.ship_purchase_ship import ShipPurchaseShip
 
 
@@ -21,5 +22,9 @@ class TradersService(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_ships(self)->list[ShipPurchaseShip]:
+    def get_ships(self) -> list[ShipPurchaseShip]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_engineered_asteroids(self, system_symbol: str) -> list[EngineeredAsteroid]:
         raise NotImplementedError
