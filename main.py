@@ -3,6 +3,7 @@ from textual.widgets import Footer, Header, Button, Static
 from textual.containers import HorizontalGroup
 from typing import cast
 
+from src.cli_textual.presentation.presenters.contracts import ContractsPresenter
 from src.traders.infraestructure.services.space_traders_service import SpaceTradersService
 
 
@@ -29,7 +30,8 @@ class SpaceActions(HorizontalGroup):
                 if not contracts:
                     output_widget.update(f"no hay contratos: {button_id}")
                 else:
-                    output_widget.update(contracts)
+                    presenter=ContractsPresenter(contracts)
+                    output_widget.update(presenter.to_str)
 
             case "ac":
                 output_widget.update(f"boton accept contract: {button_id}")
