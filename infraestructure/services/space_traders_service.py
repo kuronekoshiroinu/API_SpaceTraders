@@ -2,6 +2,7 @@ from http.client import responses
 from zoneinfo import available_timezones
 
 import requests
+from requests.models import Response
 
 # from aplication.use_cases.ship_available_viewer import ShipAvailableViewer
 from domain.constants import BASE_URL, AUTHORIZATION_HEADERS, ACCOUNT_HEADERS
@@ -83,10 +84,10 @@ class SpaceTradersService(TradersService):
 
     def orbit_ship(self, ship_symbol: str) -> ShipPurchaseShipNav:
         return ShipPurchaseShipNav.from_dict(
-            data=self._post_endpoint_response_nav(
+            data=self._post_endpoint_response(
                 endpoint=f"/my/ships/{ship_symbol}/orbit",
                 headers=AUTHORIZATION_HEADERS,
-            )
+            )["nav"]
         )
 
     def navigate_ship(self, ship_symbol: str, waypoint_symbol: str) -> ToAsteroidNavigate:
@@ -104,10 +105,10 @@ class SpaceTradersService(TradersService):
 
     def dock_ship(self, ship_symbol: str) -> ShipPurchaseShipNav:
         return ShipPurchaseShipNav.from_dict(
-            data=self._post_endpoint_response_nav(
+            data=self._post_endpoint_response(
                 endpoint=f"/my/ships/{ship_symbol}/dock",
                 headers=AUTHORIZATION_HEADERS,
-            )
+            )["nav"]
         )
 
     def refuel_ship(self, ship_symbol: str) -> ShipRefuel:
@@ -118,7 +119,7 @@ class SpaceTradersService(TradersService):
             )
         )
 
-    def extract_mineral_and_ores(self, ship_symbol:str):
+    def extract_mineral_and_ores(self, ship_symbol: str):
         return ExtractOre.from_dict(
             data=self._post_endpoint_response(
                 endpoint=f"/my/ships/{ship_symbol}/extract",
@@ -126,12 +127,24 @@ class SpaceTradersService(TradersService):
             )
         )
 
-    def view_cargo(self, ship_symbol:str):
+    def view_cargo(self, ship_symbol: str):
         return ExtractOreCargo.from_dict(
             data=self._get_endpoint_response(
                 endpoint=f"/my/ships/{ship_symbol}/cargo",
                 headers=AUTHORIZATION_HEADERS,
             )
+        )
+
+    def jettison_ore(self, ship_symbol: str, symbol: str, units: int):
+        return ExtractOreCargo.from_dict(
+            data=self._post_endpoint_response(
+                endpoint=f"/my/ships/{ship_symbol}/jettison",
+                headers=AUTHORIZATION_HEADERS,
+                payload={
+                    "symbol": symbol,
+                    "units": units,
+                },
+            )["cargo"]
         )
 
     @classmethod
@@ -155,19 +168,6 @@ class SpaceTradersService(TradersService):
         else:
             raise ValueError(f"Error al obtener datos: {response.status_code} {response.json()}")
 
-    @classmethod
-    def _post_endpoint_response_nav(cls, endpoint: str, headers: dict, payload: dict = None):
-        response = requests.post(
-            url=f"{BASE_URL}{endpoint}",
-            headers=headers,
-            json=payload,
-        )
-        if response.status_code == 200 or response.status_code == 201:
-            return response.json()["data"]["nav"]
-        else:
-            raise ValueError(f"Error al obtener datos: {response.status_code} {response.json()}")
-
-
 if __name__ == "__main__":
     from pprint import pprint
     from domain.entities.ships_available import ShipsAvailable
@@ -178,17 +178,18 @@ if __name__ == "__main__":
     if not contracts:
         raise ValueError("No hay contratos")
     # account = space.get_account()
-    #asteroids=space.find_engineered_asteroids(contracts[0].terms.deliver[0].system_symbol)
-    #shipyards_infos = space.find_shipyards(system_symbol=contracts[0].terms.deliver[0].system_symbol)
+    # asteroids=space.find_engineered_asteroids(contracts[0].terms.deliver[0].system_symbol)
+    # shipyards_infos = space.find_shipyards(system_symbol=contracts[0].terms.deliver[0].system_symbol)
     # available_ships_info = space.view_ship_available(system_symbol=contracts[0].terms.deliver[0].system_symbol,
     #                        waypoint_symbol=shipyards_infos[2].symbol)
-    #orbiter=space.orbit_ship("GREEN-1")
+    # orbiter=space.orbit_ship("GREEN-1")
     # docker = space.dock_ship("GREEN-2")
     # pprint(orbiter)
     # ship_purchaser=space.purchase_ship(ship_type="SHIP_MINING_DRONE",waypoint_symbol=available_ships_info.symbol)
     # refuel_ship = space.refuel_ship("GREEN-2")
-    #navigate = space.navigate_ship("GREEN-1", "X1-TC65-ZE5B")
-    #extracter=space.extract_mineral_and_ores("GREEN-1")
-    cargo=space.view_cargo("GREEN-1")
+    # navigate = space.navigate_ship("GREEN-1", "X1-TC65-ZE5B")
+    # extracter=space.extract_mineral_and_ores("GREEN-1")
+    #cargo = space.view_cargo("GREEN-1")
+    jettison=space.jettison_ore("GREEN-1", "SILICON_CRYSTALS", 3)
 
-    pprint(cargo)
+    pprint(jettison)
