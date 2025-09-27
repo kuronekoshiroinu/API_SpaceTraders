@@ -1,3 +1,4 @@
+from http.client import responses
 from zoneinfo import available_timezones
 
 import requests
@@ -8,6 +9,7 @@ from domain.entities.account import Account
 from domain.entities.contract import Contract
 from domain.entities.engineered_asteroid import EngineeredAsteroid
 from domain.entities.extract_ore import ExtractOre
+from domain.entities.extract_ore_cargo import ExtractOreCargo
 from domain.entities.ship_purchase import ShipPurchase
 from domain.entities.ship_purchase_ship import ShipPurchaseShip
 from domain.entities.ship_purchase_ship_nav import ShipPurchaseShipNav
@@ -124,6 +126,14 @@ class SpaceTradersService(TradersService):
             )
         )
 
+    def view_cargo(self, ship_symbol:str):
+        return ExtractOreCargo.from_dict(
+            data=self._get_endpoint_response(
+                endpoint=f"/my/ships/{ship_symbol}/cargo",
+                headers=AUTHORIZATION_HEADERS,
+            )
+        )
+
     @classmethod
     def _get_endpoint_response(cls, endpoint: str, headers: dict):
         response = requests.get(f"{BASE_URL}{endpoint}",
@@ -178,5 +188,7 @@ if __name__ == "__main__":
     # ship_purchaser=space.purchase_ship(ship_type="SHIP_MINING_DRONE",waypoint_symbol=available_ships_info.symbol)
     # refuel_ship = space.refuel_ship("GREEN-2")
     #navigate = space.navigate_ship("GREEN-1", "X1-TC65-ZE5B")
-    extracter=space.extract_mineral_and_ores("GREEN-1")
-    pprint(extracter)
+    #extracter=space.extract_mineral_and_ores("GREEN-1")
+    cargo=space.view_cargo("GREEN-1")
+
+    pprint(cargo)
