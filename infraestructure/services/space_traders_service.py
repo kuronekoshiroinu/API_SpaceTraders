@@ -13,6 +13,7 @@ from domain.entities.ship_purchase_ship_nav import ShipPurchaseShipNav
 from domain.entities.ship_refuel import ShipRefuel
 from domain.entities.ships_available import ShipsAvailable
 from domain.entities.shipyard import Shipyard
+from domain.entities.to_asteroid_navigate import ToAsteroidNavigate
 from domain.interfaces import TradersService
 
 
@@ -65,38 +66,46 @@ class SpaceTradersService(TradersService):
             )
         )
 
-    def purchase_ship(self, ship_type: str, waypoint_symbol:str) -> ShipPurchase:
-        url = f"{BASE_URL}/my/ships"
-        payload = {
-            "shipType": ship_type,
-            "waypointSymbol": waypoint_symbol
-        }
-        response = requests.post(
-            url,
-            headers=ACCOUNT_HEADERS,
-            json=payload
+    def purchase_ship(self, ship_type: str, waypoint_symbol: str) -> ShipPurchase:
+        return ShipPurchase.from_dict(
+            data=self._post_endpoint_response(
+                endpoint="/my/ships",
+                headers=ACCOUNT_HEADERS,
+                payload={
+                    "shipType": ship_type,
+                    "waypointSymbol": waypoint_symbol
+                },
+            )
         )
-        if response.status_code in (200, 201):
-            return ShipPurchase.from_dict(response.json()["data"])
-        else:
-            error_msg = response.json().get('error', {}).get('message', 'Error desconocido')
-            raise ValueError(f"Error al obtener ship purchase: {error_msg} statusCode: {response.status_code}")
 
-    def orbit_ship(self, ship_symbol:str) -> ShipPurchaseShipNav:
-        response = requests.post(f"{BASE_URL}/my/ships/{ship_symbol}/orbit",
-                                 headers=AUTHORIZATION_HEADERS)
-        if response.status_code == 200:
-            return ShipPurchaseShipNav.from_dict(response.json()["data"]["nav"])
+    def orbit_ship(self, ship_symbol: str) -> ShipPurchaseShipNav:
+        return ShipPurchaseShipNav.from_dict(
+            data=self._post_endpoint_response_nav(
+                endpoint=f"/my/ships/{ship_symbol}/orbit",
+                headers=AUTHORIZATION_HEADERS,
+            )
+        )
+
+    def navigate_ship(self, ship_symbol: str, waypoint_symbol: str) -> ToAsteroidNavigate:
+        response = requests.post(
+            url=f"{BASE_URL}/my/ships/{ship_symbol}/navigate",
+            headers=AUTHORIZATION_HEADERS,
+            json={
+                "waypointSymbol": waypoint_symbol
+            },
+        )
+        if response.status_code == 200 or response.status_code == 201:
+            return ToAsteroidNavigate.from_dict(response.json())
         else:
-            raise ValueError(f"Error al obtener datos: {response.status_code}")
+            raise ValueError(f"Error al obtener datos: {response.status_code} {response.json()}")
 
     def dock_ship(self, ship_symbol: str) -> ShipPurchaseShipNav:
-        response = requests.post(f"{BASE_URL}/my/ships/{ship_symbol}/dock",
-                                 headers=AUTHORIZATION_HEADERS)
-        if response.status_code == 200:
-            return ShipPurchaseShipNav.from_dict(response.json()["data"]["nav"])
-        else:
-            raise ValueError(f"Error al obtener datos: {response.status_code}")
+        return ShipPurchaseShipNav.from_dict(
+            data=self._post_endpoint_response_nav(
+                endpoint=f"/my/ships/{ship_symbol}/dock",
+                headers=AUTHORIZATION_HEADERS,
+            )
+        )
 
     def refuel_ship(self, ship_symbol: str) -> ShipRefuel:
         return ShipRefuel.from_dict(
@@ -116,13 +125,28 @@ class SpaceTradersService(TradersService):
             raise ValueError(f"Error al obtener datos: {response.status_code} {response.json()}")
 
     @classmethod
-    def _post_endpoint_response(cls, endpoint: str, headers: dict):
-        response = requests.post(f"{BASE_URL}{endpoint}",
-                                 headers=headers)
-        if response.status_code == 200:
+    def _post_endpoint_response(cls, endpoint: str, headers: dict, payload: dict = None):
+        response = requests.post(
+            url=f"{BASE_URL}{endpoint}",
+            headers=headers,
+            json=payload,
+        )
+        if response.status_code == 200 or response.status_code == 201:
             return response.json()["data"]
         else:
-            raise ValueError(f"Error al obtener datos: {response.status_code}")
+            raise ValueError(f"Error al obtener datos: {response.status_code} {response.json()}")
+
+    @classmethod
+    def _post_endpoint_response_nav(cls, endpoint: str, headers: dict, payload: dict = None):
+        response = requests.post(
+            url=f"{BASE_URL}{endpoint}",
+            headers=headers,
+            json=payload,
+        )
+        if response.status_code == 200 or response.status_code == 201:
+            return response.json()["data"]["nav"]
+        else:
+            raise ValueError(f"Error al obtener datos: {response.status_code} {response.json()}")
 
 
 if __name__ == "__main__":
@@ -131,17 +155,18 @@ if __name__ == "__main__":
 
     space = SpaceTradersService()
     ships = space.get_ships()
-    #contracts = space.get_contracts()
-    #if not contracts:
-    #    raise ValueError("No hay contratos")
-    #account = space.get_account()
-    #asteroids=space.find_engineered_asteroids(contracts[0].terms.deliver[0].system_symbol)
+    contracts = space.get_contracts()
+    if not contracts:
+        raise ValueError("No hay contratos")
+    # account = space.get_account()
+    # asteroids=space.find_engineered_asteroids(contracts[0].terms.deliver[0].system_symbol)
     #shipyards_infos = space.find_shipyards(system_symbol=contracts[0].terms.deliver[0].system_symbol)
-    #available_ships_info = space.view_ship_available(system_symbol=contracts[0].terms.deliver[0].system_symbol,
-                   #                        waypoint_symbol=shipyards_infos[2].symbol)
-    #orbiter=space.orbit_ship("GRAY-2")
-    #docker=space.dock_ship("AGENT_BLUE-6")
-    #pprint(orbiter)
-    #ship_purchaser=space.purchase_ship(ship_type="SHIP_MINING_DRONE",waypoint_symbol=available_ships_info.symbol)
-    refuel_ship=space.refuel_ship("AGENT_ROUGE-2")
-    pprint(refuel_ship)
+    # available_ships_info = space.view_ship_available(system_symbol=contracts[0].terms.deliver[0].system_symbol,
+    #                        waypoint_symbol=shipyards_infos[2].symbol)
+    # orbiter=space.orbit_ship("GREEN-2")
+    # docker = space.dock_ship("GREEN-2")
+    # pprint(orbiter)
+    # ship_purchaser=space.purchase_ship(ship_type="SHIP_MINING_DRONE",waypoint_symbol=available_ships_info.symbol)
+    # refuel_ship = space.refuel_ship("GREEN-2")
+    navigate = space.navigate_ship("GREEN-2", "X1-TC65-C42")
+    pprint(navigate)

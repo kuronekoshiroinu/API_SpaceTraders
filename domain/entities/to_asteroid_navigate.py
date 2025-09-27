@@ -11,8 +11,8 @@ class ToAsteroidNavigate:
     nav: ShipPurchaseShipNav
 
     @classmethod
-    def from_dict(cls, asteroid_data: dict):
-        data=asteroid_data["data"]
+    def from_dict(cls, data: dict):
+        data=data["data"]
         return cls(
             events=data["events"],
             fuel=ToAsteroidNavigateFuel.from_dict(data["fuel"]),
