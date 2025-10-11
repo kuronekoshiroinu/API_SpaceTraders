@@ -142,6 +142,9 @@ class SpaceTradersService(TradersService):
             )["cargo"]
         )
 
+    def view_market(self, system_symbol: str, asteroid_waypoint:str):
+        return
+
     @classmethod
     def _get_endpoint_response(cls, endpoint: str, headers: dict):
         response = requests.get(f"{BASE_URL}{endpoint}",
@@ -173,18 +176,18 @@ if __name__ == "__main__":
     if not contracts:
         raise ValueError("No hay contratos")
     # account = space.get_account()
-    # asteroids=space.find_engineered_asteroids(contracts[0].terms.deliver[0].system_symbol)
-    # shipyards_infos = space.find_shipyards(system_symbol=contracts[0].terms.deliver[0].system_symbol)
-    # available_ships_info = space.view_ship_available(system_symbol=contracts[0].terms.deliver[0].system_symbol,
+    #asteroids=space.find_engineered_asteroids(contracts[0].terms.deliver[0].system_symbol)
+    #shipyards_infos = space.find_shipyards(system_symbol=contracts[0].terms.deliver[0].system_symbol)
+    #available_ships_info = space.view_ship_available(system_symbol=contracts[0].terms.deliver[0].system_symbol,
     #                        waypoint_symbol=shipyards_infos[2].symbol)
     # orbiter=space.orbit_ship("GREEN-1")
     # docker = space.dock_ship("GREEN-2")
     # pprint(orbiter)
-    # ship_purchaser=space.purchase_ship(ship_type="SHIP_MINING_DRONE",waypoint_symbol=available_ships_info.symbol)
+    #ship_purchaser=space.purchase_ship(ship_type="SHIP_MINING_DRONE",waypoint_symbol=available_ships_info.symbol)
     # refuel_ship = space.refuel_ship("GREEN-2")
     # navigate = space.navigate_ship("GREEN-1", "X1-TC65-ZE5B")
     # extracter=space.extract_mineral_and_ores("GREEN-1")
     #cargo = space.view_cargo("GREEN-1")
-    jettison=space.jettison_ore("GREEN-1", "SILICON_CRYSTALS", 3)
+    #jettison=space.jettison_ore("GREEN-1", "SILICON_CRYSTALS", 3)
 
-    pprint(jettison)
+    pprint(contracts)
