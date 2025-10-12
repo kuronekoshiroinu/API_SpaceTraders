@@ -8,4 +8,4 @@ class ShipPurchasePresenter:
 
     @property
     def to_str(self) -> str:
-        return json.dumps(self.ship_purchase.to_dict)
+        return json.dumps(self.ship_purchase.to_dict,indent=3)
