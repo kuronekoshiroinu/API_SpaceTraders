@@ -8,4 +8,5 @@ dependencies = [
     "fastapi[standard]>=0.116.1",
     "python-dotenv>=1.1.1",
     "requests>=2.32.4",
+    "textual>=6.1.0",
 ]
