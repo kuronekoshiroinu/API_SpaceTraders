@@ -23,7 +23,6 @@ class SpaceActions(HorizontalGroup):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         button_id = event.button.id
-        # Actualizar el widget Static con el ID del botón
         output_widget = cast(Static, self.app.query_one("#output-text"))
         space = SpaceTradersService()
         match button_id:
