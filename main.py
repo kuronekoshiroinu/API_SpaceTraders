@@ -44,7 +44,6 @@ class SpaceActions(HorizontalGroup):
                     waypoint_symbol=shipyards_infos[2].symbol)
                 ship_purchaser = space.purchase_ship(ship_type="SHIP_MINING_DRONE",
                                                      waypoint_symbol=available_ships_info.symbol)
-                #TODO formulario de 3 campos + boton de envio , el boton crea un panel
 
                 presenter=ShipPurchasePresenter(ship_purchaser)
                 output_widget.update(presenter.to_str)
