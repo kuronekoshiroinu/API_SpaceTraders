@@ -23,7 +23,6 @@ class SpaceActions(HorizontalGroup):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         button_id = event.button.id
-        # Actualizar el widget Static con el ID del botón
         output_widget = cast(Static, self.app.query_one("#output-text"))
         space = SpaceTradersService()
         match button_id:
@@ -45,6 +44,7 @@ class SpaceActions(HorizontalGroup):
                     waypoint_symbol=shipyards_infos[2].symbol)
                 ship_purchaser = space.purchase_ship(ship_type="SHIP_MINING_DRONE",
                                                      waypoint_symbol=available_ships_info.symbol)
+                #TODO formulario de 3 campos + boton de envio , el boton crea un panel
 
                 presenter=ShipPurchasePresenter(ship_purchaser)
                 output_widget.update(presenter.to_str)
