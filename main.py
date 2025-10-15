@@ -104,7 +104,7 @@ class SpaceActions(Screen):
                 input2 = self.query_one("#input2")
                 submit_button = self.query_one("#submit_input")
 
-                if input1.display:  # Si ya está visible, ocultar todo
+                if input1.display:  # Si ya está visible
                     input1.display = False
                     input2.display = False
                     submit_button.display = False
