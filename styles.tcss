@@ -1,0 +1,16 @@
+.top-buttons {
+
+    text-wrap: wrap;
+    layout: horizontal;
+    content-align: center top;
+}
+.button{
+    width: 5%;
+
+}
+#input1{
+    width: 20%
+}
+Horizontal{
+    height: auto;
+}
