@@ -11,6 +11,9 @@
 #input1{
     width: 20%
 }
+#input2{
+    width: 20%
+}
 Horizontal{
     height: auto;
 }

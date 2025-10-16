@@ -1,8 +1,9 @@
 from textual.app import App, ComposeResult
 from textual.containers import Container, Horizontal, Vertical
 from textual.screen import Screen
-from textual.widgets import Button, Footer, Header, Log, Input
+from textual.widgets import Button, Footer, Header, Log
 
+from src.cli_textual.domain.widgets.custom_form import CustomFormWidget
 from src.cli_textual.presentation.presenters.contracts import ContractsPresenter
 from src.cli_textual.presentation.presenters.ship_purchase import ShipPurchasePresenter
 from src.traders.application.use_cases.contract_accepter import ContractAccepter
@@ -31,11 +32,7 @@ class SpaceActions(Screen):
                     Button("View Cargo", id="vc"),
                     # classes="top-buttons",
                 ),
-                Horizontal(
-                    Input(placeholder="Input 1", id="input1"),
-                    Input(placeholder="Input 2", id="input2"),
-                    Button("Enviar", id="submit_input", classes="button"),
-                ),
+                CustomFormWidget(id="custom_form_widget"),
 
                 # Área de salida
                 Log(id="output-text", highlight=True,
@@ -51,11 +48,6 @@ class SpaceActions(Screen):
         )
 
         yield Footer()
-
-    def on_mount(self) -> None:
-        self.query_one("#input1").display = False
-        self.query_one("#input2").display = False
-        self.query_one("#submit_input").display = False
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         button_id = event.button.id
@@ -100,20 +92,13 @@ class SpaceActions(Screen):
                 presenter = ShipPurchasePresenter(ship_purchaser)
                 output_widget.write(presenter.to_str)
             case "os":
-                input1 = self.query_one("#input1")
-                input2 = self.query_one("#input2")
-                submit_button = self.query_one("#submit_input")
-
-                if input1.display:  # Si ya está visible
-                    input1.display = False
-                    input2.display = False
-                    submit_button.display = False
+                custom_form_widget: CustomFormWidget = self.query_one("#custom_form_widget")
+                if custom_form_widget.input1.display:
+                    custom_form_widget.change_display_status(False, False, False)
                     self.action_pending = None
                     output_widget.write("Cancelado Orbit Ship.")
-                else:  # Si no está visible, mostrar lo necesario
-                    input1.display = True
-                    input2.display = False
-                    submit_button.display = True
+                else:
+                    custom_form_widget.change_display_status(True, False, True)
                     self.action_pending = "orbit_ship"
                     output_widget.write("Ingresa el símbolo del barco para orbitar:")
             case "jm":
