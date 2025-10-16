@@ -7,10 +7,21 @@ from src.cli_textual.domain.widgets.custom_form import CustomFormWidget
 from src.cli_textual.presentation.presenters.contracts import ContractsPresenter
 from src.cli_textual.presentation.presenters.ship_purchase import ShipPurchasePresenter
 from src.traders.application.use_cases.contract_accepter import ContractAccepter
+from src.traders.domain.interfaces import TradersService
 from src.traders.infraestructure.services.space_traders_service import SpaceTradersService
 
 
 class SpaceActions(Screen):
+    def __init__(
+            self,
+            traders_service: TradersService,
+            name: str | None = None,
+            id: str | None = None,
+            classes: str | None = None,
+    ) -> None:
+        self.traders_service = traders_service
+        super().__init__(name=name, id=id, classes=classes)
+
     def compose(self) -> ComposeResult:
         action_pending: str | None = None
         yield Header()
@@ -58,11 +69,9 @@ class SpaceActions(Screen):
             self.app.exit()
             return
 
-        space = SpaceTradersService()
-
         match button_id:
             case "sc":
-                contracts = space.get_contracts()
+                contracts = self.traders_service.get_contracts()
                 if not contracts:
                     output_widget.write("No hay contratos disponibles.")
                 else:
@@ -70,7 +79,7 @@ class SpaceActions(Screen):
                     output_widget.write(presenter.to_str)
 
             case "ac":
-                contracts = space.get_contracts()
+                contracts = self.traders_service.get_contracts()
                 id_contracts = contracts[0].id
                 if contracts[0].accepted == False:
                     accept = ContractAccepter(contract_id=id_contracts).execute()
@@ -79,13 +88,13 @@ class SpaceActions(Screen):
                     output_widget.write("Ya fue aceptado")
 
             case "bs":
-                contracts = space.get_contracts()
-                shipyards_infos = space.find_shipyards(
+                contracts = self.traders_service.get_contracts()
+                shipyards_infos = self.traders_service.find_shipyards(
                     system_symbol=contracts[0].terms.deliver[0].system_symbol)
-                available_ships_info = space.view_ship_available(
+                available_ships_info = self.traders_service.view_ship_available(
                     system_symbol=contracts[0].terms.deliver[0].system_symbol,
                     waypoint_symbol=shipyards_infos[2].symbol)
-                ship_purchaser = space.purchase_ship(
+                ship_purchaser = self.traders_service.purchase_ship(
                     ship_type="SHIP_MINING_DRONE",
                     waypoint_symbol=available_ships_info.symbol)
 
@@ -113,7 +122,7 @@ class SpaceActions(Screen):
 
                 if self.action_pending == "orbit_ship":
                     # Aquí haces la lógica para orbitar
-                    result = space.orbit_ship(ship_symbol=value)
+                    result = self.traders_service.orbit_ship(ship_symbol=value)
                     output_widget.write(f"Orbitando nave {value}: {result}")
 
                 else:
@@ -133,7 +142,7 @@ class MainApp(App):
     CSS_PATH = "styles.tcss"
 
     def on_mount(self) -> None:
-        self.push_screen(SpaceActions())
+        self.push_screen(SpaceActions(traders_service=SpaceTradersService()))
 
 
 if __name__ == "__main__":
